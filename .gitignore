@@ -1,0 +1,41 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+# IDE / Editor files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Composer vendor folder
+composer.phar
+/vendor/
+
+# Node / npm files (if you use frontend tooling)
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+
+# Backup files
+*.bak
+*.swp
+*.tmp
+
+# Environment files
+.env
+.env.local
+
+# Ignore zip files
+*.zip
+
+# Ignore WP
+wordpress/

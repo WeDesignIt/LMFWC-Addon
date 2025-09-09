@@ -1,0 +1,61 @@
+{
+  "name": "wedesignit/lmfwc-addon",
+  "description": "A WooCommerce plugin to add a REST API endpoints to LicenseManager for WooCommerce.",
+  "type": "wordpress-plugin",
+  "authors": [
+    {
+      "name": "WeDeisgnIt",
+      "email": "dev@wedeisgnit.nl",
+      "role": "Developer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "danielbakovic/license-manager-for-woocommerce",
+        "version": "dev-DEV",
+        "source": {
+          "url": "https://github.com/DanielBakovic/license-manager-for-woocommerce.git",
+          "type": "git",
+          "reference": "DEV"
+        },
+        "autoload": {
+          "psr-4": {
+            "LicenseManagerForWooCommerce\\": "includes/"
+          }
+        }
+      }
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=8.0"
+  },
+  "require-dev": {
+    "johnpbloch/wordpress": "^6.8",
+    "composer/installers": "^2.2",
+    "woocommerce/woocommerce-sniffs": "^1.0",
+    "danielbakovic/license-manager-for-woocommerce": "dev-DEV"
+  },
+  "extra": {
+    "wordpress-install-dir": "wordpress",
+    "installer-paths": {
+      "wp-content/plugins/{$name}/": [
+        "type:wordpress-plugin"
+      ]
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "WeDesignIt\\LMFWCAddon\\": "includes/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "johnpbloch/wordpress-core-installer": true,
+      "composer/installers": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
+}
