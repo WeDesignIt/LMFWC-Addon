@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: LMFWC Addon
+ * Plugin Name: License Manager for WooCommerce – Endpoint Addon
  * Plugin URI: https://github.com/WeDesignIt/LMFWC-Addon
  * Description: Adds REST API endpoints to LicenseManager for WooCommerce.
  * Version: 1.0.0

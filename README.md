@@ -6,7 +6,7 @@ This plugin extends the [License Manager for WooCommerce][link-lmfwc] by adding 
 
 - WordPress 6.0+
 - WooCommerce
-- License Manager for WooCommerce
+- License Manager for WooCommerce 2.0+
 - PHP 8.0+
 
 ## Installation
