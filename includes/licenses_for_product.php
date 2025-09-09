@@ -1,31 +1,44 @@
 <?php
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 add_action('rest_api_init', function () {
     register_rest_route('lmfwc/v2', '/product-licenses/(?P<product_id>\d+)', [
-        'methods' => 'GET',
-        'callback' => 'lmfwc_get_licenses_for_product',
-        'permission_callback' => function () {
-            return current_user_can('manage_woocommerce');
-        },
+        'methods' => WP_REST_Server::READABLE,
+        'callback' => 'getLicensesForProduct',
         'args' => [
             'product_id' => [
-                'validate_callback' => function ($param) {
-                    return is_numeric($param);
-                }
+                'validate_callback' => fn ($param) => is_numeric($param)
             ]
         ]
     ]);
 });
 
-if (! function_exists('lmfwc_get_licenses_for_product')) {
-    function lmfwc_get_licenses_for_product($request)
-    {
-        $productId = (int) $request['product_id'];
+function getLicensesForProduct(WP_REST_Request $request)
+{
+    $productId = $request->get_param('product_id');
 
+    try {
         $licenses = lmfwc_get_licenses(compact('productId'));
-
-        return rest_ensure_response($licenses);
+    } catch (Exception $e) {
+        return new WP_Error(
+            'lmfwc_rest_data_error',
+            $e->getMessage(),
+            array('status' => 404)
+        );
     }
+
+    $data = array_map(function ($license) {
+        $licenseData = $license->toArray();
+
+        // Remove the hash, decrypt the license key, and add it to the response
+        unset($licenseData['hash']);
+        $licenseData['licenseKey'] = $license->getDecryptedLicenseKey();
+
+        return $licenseData;
+    }, $licenses);
+
+    return rest_ensure_response(
+        apply_filters('lmfwc_rest_api_pre_response', 'GET', $request->get_route(), $data)
+    );
 }
