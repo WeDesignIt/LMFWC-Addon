@@ -1,5 +1,7 @@
 <?php
 
+use LicenseManagerForWooCommerce\Repositories\Resources\License;
+
 defined('ABSPATH') || exit;
 
 add_action('rest_api_init', function () {
@@ -8,7 +10,7 @@ add_action('rest_api_init', function () {
         'callback' => 'getLicensesForProduct',
         'args' => [
             'product_id' => [
-                'validate_callback' => fn ($param) => is_numeric($param)
+                'validate_callback' => fn($param) => is_numeric($param)
             ]
         ]
     ]);
@@ -18,8 +20,19 @@ function getLicensesForProduct(WP_REST_Request $request)
 {
     $productId = $request->get_param('product_id');
 
+    $query = $request->get_query_params();
+    $page = $query['page'] ?? 1;
+    $perPage = $query['per_page'] ?? 100;
+    $oderBy = $query['order_by'] ?? 'id';
+    $offset = $page * $perPage;
+
     try {
-        $licenses = lmfwc_get_licenses(compact('productId'));
+        if (array_key_exists('license_key', $query)) {
+            $query['hash'] = apply_filters('lmfwc_hash', $query['license_key']);
+            unset($query['license_key']);
+        }
+
+        $licenses = License::instance()->findAllBy($query, $oderBy, "LIMIT {$perPage} OFFSET {$offset};");
     } catch (Exception $e) {
         return new WP_Error(
             'lmfwc_rest_data_error',
