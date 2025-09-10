@@ -28,8 +28,8 @@ function getLicensesForProduct(WP_REST_Request $request): WP_Error|WP_REST_Respo
     $query = $request->get_query_params();
 
     // Grab offset & limit from query params
-    $page = $query['page'] ?? 1;
-    $perPage = $query['per_page'] ?? 100;
+    $page = (int) $query['page'] ?? 1;
+    $perPage = (int) $query['per_page'] ?? 100;
     $oderBy = $query['order_by'] ?? 'id';
     $offset = $page * $perPage;
 
@@ -58,6 +58,22 @@ function getLicensesForProduct(WP_REST_Request $request): WP_Error|WP_REST_Respo
     ]), ARRAY_FILTER_USE_BOTH);
 
     $query['product_id'] = $productId;
+
+    // Normalize values
+    $query = array_map(fn($value) => match (true) {
+        // Cast 'null'
+        $value === 'null',
+        $value === 'NULL' => null,
+        // Cast booleans
+        $value === 'true' => true,
+        $value === 'false' => false,
+
+        // cast to int/float
+        is_numeric($value) => $value + 0,
+
+        default => $value,
+    }, $query);
+
 
     try {
         $licenses = LicenseResourceRepository::instance()->findAllBy(
