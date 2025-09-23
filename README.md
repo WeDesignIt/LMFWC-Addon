@@ -26,6 +26,12 @@ Check the [documentation](docs/endpoints.md) for details.
 
 ## Changelog
 
+### 1.0.2
+- Pagination correction (was returning the wrong offset value)
+
+### 1.0.1
+- Bug fixes
+
 ### 1.0.0
 - Initial release.
 

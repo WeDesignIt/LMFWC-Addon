@@ -28,10 +28,10 @@ function getLicensesForProduct(WP_REST_Request $request): WP_Error|WP_REST_Respo
     $query = $request->get_query_params();
 
     // Grab offset & limit from query params
-    $page = (int) $query['page'] ?? 1;
-    $perPage = (int) $query['per_page'] ?? 100;
+    $page = absint((int) $query['page'] ?? 1);
+    $perPage = absint((int) $query['per_page'] ?? 100);
     $oderBy = $query['order_by'] ?? 'id';
-    $offset = $page * $perPage;
+    $offset = max(($page - 1), 0) * max($perPage, 0);
 
     if (array_key_exists('license_key', $query)) {
         $query['hash'] = apply_filters('lmfwc_hash', $query['license_key']);
