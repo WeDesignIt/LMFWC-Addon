@@ -1,9 +1,6 @@
 <?php
 
 use LicenseManagerForWooCommerce\Repositories\Resources\License as LicenseResourceRepository;
-use WP_Error;
-use WP_REST_Response;
-use WP_REST_Request;
 
 defined('ABSPATH') || exit;
 
